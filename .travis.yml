@@ -1,0 +1,22 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+  - docker build -t saulable/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run saulable/react-test npm test -- --coverage
+# builds production ready images each one.
+after_success:
+  - docker build -t saulable/multi-client ./client
+  - docker build -t saulable/multi-nginx ./nginx
+  - docker build -t saulable/multi-server ./server
+  - docker build -t saulable/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # take those images and push them to docker hub.
+  - docker push saulable/multi-client
+  - docker push saulable/multi-nginx
+  - docker push saulable/multi-server
+  - docker push saulable/multi-worker
