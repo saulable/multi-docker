@@ -10,7 +10,7 @@
 		},
 		{
 			"name" : "server",
-			"image" : "saualable/multi-server",
+			"image" : "saulable/multi-server",
 			"hostname" : "api",
 			"essential" : false,
 			"memory": 128
